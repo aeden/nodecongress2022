@@ -9,6 +9,7 @@ var client = require("dnsimple")({
 
 const args = process.argv.slice(2);
 var domainName = args[0];
+var registrantId = args[1];
 
 // Fetch your account details
 client.identity.whoami().then((response) => {
@@ -16,7 +17,14 @@ client.identity.whoami().then((response) => {
 
   console.log("Check availability of " + domainName);
   client.registrar.checkDomain(accountId, domainName).then((response) => {
-    console.log(response.data);
+    if (response.data.available) {
+      console.log("Domain " + domainName + " is available");
+      client.registrar.registerDomain(accountId, domainName, {registrant_id: registrantId}).then((response) => {
+        console.log(response);
+      });
+    } else {
+      console.log("Domain " + domainName + " is not available");
+    }
   });
 }, (error) => {
   console.log(error);
