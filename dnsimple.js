@@ -1,9 +1,8 @@
 "use strict";
 
-require('dotenv').config();
+require('dotenv').config({ override: true });
 
 var client = require("dnsimple")({
-  baseUrl: 'https://api.sandbox.dnsimple.com',
   accessToken: process.env.TOKEN,
 });
 
