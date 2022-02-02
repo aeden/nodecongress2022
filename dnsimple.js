@@ -20,7 +20,11 @@ client.identity.whoami().then((response) => {
     if (response.data.available) {
       console.log("Domain " + domainName + " is available");
       client.registrar.registerDomain(accountId, domainName, {registrant_id: registrantId}).then((response) => {
-        console.log(response);
+        client.zones.createZoneRecord(accountId, domainName, {name: "", type: "ALIAS", content: "proxy-ssl.webflow.com"});
+        client.domains.createEmailForward(accountId, domainName, {alias_name: "anthony", destination_email: "anthony.eden@dnsimple.com"});
+        client.zones.listZoneRecords(accountId, domainName).then((response) => {
+          console.log(response);
+        });
       });
     } else {
       console.log("Domain " + domainName + " is not available");
